@@ -50,6 +50,56 @@ jobs:
         run: |
           python3 scripts/check-lean-sources.py
           python3 scripts/check-release-layout.py
+      - name: Release unused image SDKs and check build disk budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          readonly -a unused_sdks=(
+            /usr/local/lib/android
+            /usr/share/dotnet
+            /usr/local/.ghcup
+          )
+          readonly comparator_tmp="${TMPDIR:-/tmp}"
+          echo "Disk use before removing unused Android, .NET and Haskell SDKs"
+          df -h -- "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"
+          for sdk in "${unused_sdks[@]}"; do
+            case "$sdk" in
+              /usr/local/lib/android|/usr/share/dotnet|/usr/local/.ghcup) ;;
+              *) echo "Unexpected SDK removal target: $sdk" >&2; exit 1 ;;
+            esac
+            # Refuse links and any target that overlaps a protected tool/work path.
+            if [[ -L "$sdk" ]]; then
+              echo "Refusing symbolic-link SDK root: $sdk" >&2
+              exit 1
+            fi
+            for protected in "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$HOME" "${RUNNER_TOOL_CACHE:-/opt/hostedtoolcache}" /usr/bin /bin /usr/local/bin; do
+              protected=$(realpath -m -- "$protected")
+              if [[ "$protected" == "$sdk" || "$protected" == "$sdk/"* || "$sdk" == "$protected/"* ]]; then
+                echo "SDK root overlaps protected path: $sdk and $protected" >&2
+                exit 1
+              fi
+            done
+            if [[ -e "$sdk" ]]; then
+              test -d "$sdk"
+              test "$(realpath -e -- "$sdk")" = "$sdk"
+              sudo du -xsk -- "$sdk"
+            fi
+          done
+          # Fixed allowlist only: no workspace, home, toolcache, Lean or package purge.
+          sudo rm -rf --one-file-system -- "${unused_sdks[@]}"
+          echo "Disk use after unused SDK cleanup"
+          df -h -- "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"
+          # Operational floor, not a measured bound on the final proof export.
+          readonly minimum_kib=$((32 * 1024 * 1024))
+          for location in "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"; do
+            available_kib=$(df -Pk -- "$location" | awk 'NR == 2 {print $4}')
+            [[ "$available_kib" =~ ^[0-9]+$ ]]
+            echo "Available KiB at $location: $available_kib; required: $minimum_kib"
+            if (( available_kib < minimum_kib )); then
+              echo "Insufficient disk space before Lean setup/cache/build (need 32 GiB)" >&2
+              exit 1
+            fi
+          done
       - name: Set up the pinned Lean toolchain without an automatic build
         uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
         with:
@@ -81,6 +131,26 @@ jobs:
           if [ -e /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
             sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           fi
+      - name: Check remaining disk budget before Comparator exports
+        shell: bash
+        run: |
+          set -euo pipefail
+          readonly comparator_tmp="${TMPDIR:-/tmp}"
+          echo "Workspace, toolchain and temporary-file disk use before Comparator"
+          df -h -- "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"
+          sudo du -xsk -- "$GITHUB_WORKSPACE/.lake" "$HOME/.elan" "$RUNNER_TEMP" "$comparator_tmp"
+          # Both Challenge and Solution NDJSON exports coexist. Their peak is unknown.
+          # Recheck after the actual build; the initial 32 GiB check cannot replace it.
+          readonly minimum_kib=$((24 * 1024 * 1024))
+          for location in "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"; do
+            available_kib=$(df -Pk -- "$location" | awk 'NR == 2 {print $4}')
+            [[ "$available_kib" =~ ^[0-9]+$ ]]
+            echo "Available KiB at $location: $available_kib; required: $minimum_kib"
+            if (( available_kib < minimum_kib )); then
+              echo "Insufficient disk space before Comparator (need 24 GiB; export peak is not yet measured)" >&2
+              exit 1
+            fi
+          done
       - name: Run the bundled Comparator and independent kernels
         shell: bash
         run: |
