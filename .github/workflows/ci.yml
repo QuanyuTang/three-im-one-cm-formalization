@@ -59,13 +59,14 @@ jobs:
             /usr/share/dotnet
             /usr/local/.ghcup
             /usr/share/swift
+            /opt/az
           )
           readonly comparator_tmp="${TMPDIR:-/tmp}"
-          echo "Disk use before removing unused Android, .NET, Haskell and Swift SDKs"
+          echo "Disk use before removing unused Android, .NET, Haskell, Swift and Azure CLI tools"
           df -h -- "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"
           for sdk in "${unused_sdks[@]}"; do
             case "$sdk" in
-              /usr/local/lib/android|/usr/share/dotnet|/usr/local/.ghcup|/usr/share/swift) ;;
+              /usr/local/lib/android|/usr/share/dotnet|/usr/local/.ghcup|/usr/share/swift|/opt/az) ;;
               *) echo "Unexpected SDK removal target: $sdk" >&2; exit 1 ;;
             esac
             # Refuse links and any target that overlaps a protected tool/work path.
