@@ -58,13 +58,14 @@ jobs:
             /usr/local/lib/android
             /usr/share/dotnet
             /usr/local/.ghcup
+            /usr/share/swift
           )
           readonly comparator_tmp="${TMPDIR:-/tmp}"
-          echo "Disk use before removing unused Android, .NET and Haskell SDKs"
+          echo "Disk use before removing unused Android, .NET, Haskell and Swift SDKs"
           df -h -- "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"
           for sdk in "${unused_sdks[@]}"; do
             case "$sdk" in
-              /usr/local/lib/android|/usr/share/dotnet|/usr/local/.ghcup) ;;
+              /usr/local/lib/android|/usr/share/dotnet|/usr/local/.ghcup|/usr/share/swift) ;;
               *) echo "Unexpected SDK removal target: $sdk" >&2; exit 1 ;;
             esac
             # Refuse links and any target that overlaps a protected tool/work path.
@@ -90,13 +91,13 @@ jobs:
           echo "Disk use after unused SDK cleanup"
           df -h -- "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"
           # Operational floor, not a measured bound on the final proof export.
-          readonly minimum_kib=$((32 * 1024 * 1024))
+          readonly minimum_kib=$((38 * 1024 * 1024))
           for location in "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"; do
             available_kib=$(df -Pk -- "$location" | awk 'NR == 2 {print $4}')
             [[ "$available_kib" =~ ^[0-9]+$ ]]
             echo "Available KiB at $location: $available_kib; required: $minimum_kib"
             if (( available_kib < minimum_kib )); then
-              echo "Insufficient disk space before Lean setup/cache/build (need 32 GiB)" >&2
+              echo "Insufficient disk space before Lean setup/cache/build (need 38 GiB)" >&2
               exit 1
             fi
           done
@@ -140,7 +141,7 @@ jobs:
           df -h -- "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"
           sudo du -xsk -- "$GITHUB_WORKSPACE/.lake" "$HOME/.elan" "$RUNNER_TEMP" "$comparator_tmp"
           # Both Challenge and Solution NDJSON exports coexist. Their peak is unknown.
-          # Recheck after the actual build; the initial 32 GiB check cannot replace it.
+          # Recheck after the actual build; the initial 38 GiB check cannot replace it.
           readonly minimum_kib=$((24 * 1024 * 1024))
           for location in "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$comparator_tmp"; do
             available_kib=$(df -Pk -- "$location" | awk 'NR == 2 {print $4}')
