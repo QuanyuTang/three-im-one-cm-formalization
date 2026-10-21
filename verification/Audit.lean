@@ -29,7 +29,7 @@ run_cmd do
     for axiomName in used do
       unless permitted.contains axiomName do
         throwError "{declaration} uses an unpermitted axiom: {axiomName}"
-    Lean.logInfo "Axiom whitelist accepted for {declaration}: {used}"
+    Lean.logInfo m!"Axiom whitelist accepted for {declaration}: {used}"
 
 #print axioms ThreeIM.three_IM_one_CM
 #print axioms ThreeIMOneCM.three_IM_one_CM

@@ -65,8 +65,9 @@ theorem analytic_order_ge_of_locallyUniformlyOn {Ω : Set ℂ} {F : ℕ → ℂ 
       ((hn.analyticOnNhd hΩ) z hz)).mp ho i hi
   exact tendsto_nhds_unique_of_eventuallyEq hdconv tendsto_const_nhds hzero
 
-/-- The marked order is lower semicontinuous. The limit is analytic by
-Weierstrass; even a locally constant limit is allowed in this inequality. -/
+/-- At the marked point the zero order is upper semicontinuous: a fixed lower bound
+passes to the locally uniform limit. The limit is analytic by Weierstrass;
+even a locally constant limit is allowed in this inequality. -/
 theorem marked_order_ge_of_locallyUniformlyOn {Ω : Set ℂ} {F : ℕ → ℂ → ℂ}
     {f : ℂ → ℂ} (hΩ : IsOpen Ω) {z : ℂ} (hz : z ∈ Ω)
     (hF : ∀ᶠ n in atTop, DifferentiableOn ℂ (F n) Ω)

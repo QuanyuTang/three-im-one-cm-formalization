@@ -17,8 +17,8 @@ import Mathlib.Tactic.Ring
 /-!
 # Consolidated stable-expansion foundations
 
-The declarations below retain the exact mathematical bodies of the
-unverified draft modules archived in the external audit directory.
+The declarations below consolidate the stable-expansion foundations
+formerly split across separate draft modules.
 This grouping reduces repeated loading of their common imports.
 -/
 

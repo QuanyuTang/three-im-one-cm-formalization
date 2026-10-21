@@ -85,9 +85,9 @@ lemma ne_of_mult_eq_zero {H : ℂ → ℂ} {z c : ℂ} (hH : AnalyticAt ℂ H z)
 
 /-- **Lemma 8.6** (last part: `μ = -κ² P'(a)` is a positive real number).  Let `f, g` be an
 exponential pair and `a j` a root of `P`.  Suppose that along every ray `r e^{iθ}` with
-`|θ| < π/2`, the function `f` is holomorphic far out, `f → a j` and `f'/P(f) → κ²` (these are
-the right-sector asymptotics of Lemmas 8.5–8.6, which are not formalized).  Then
-`μ = -κ² P'(a j)` is a positive real number. -/
+`|θ| < π/2`, the function `f` is holomorphic far out, `f → a j` and `f'/P(f) → κ²`.
+`ExponentialSectorExponent` supplies these ray hypotheses for the canonical representatives
+from the proved right-sector asymptotics. Then `μ = -κ² P'(a j)` is a positive real number. -/
 theorem ExponentialPair.stable_exponent_pos (h : ExponentialPair a f g κ) (j : Fin 3)
     (hray : ∀ θ : ℝ, |θ| < Real.pi / 2 →
       (∀ᶠ r : ℝ in atTop, DifferentiableAt ℂ f (r * Complex.exp (θ * Complex.I))) ∧
