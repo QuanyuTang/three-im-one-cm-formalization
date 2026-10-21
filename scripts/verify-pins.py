@@ -56,16 +56,37 @@ def inspect_dependencies(root: Path) -> dict:
         ).strip()
         if status:
             raise ValueError("Dependency checkout is not clean: " + name)
-        tracked = subprocess.check_output(["git", "-C", str(dependency), "ls-files", "-z"])
+        tracked = subprocess.check_output(["git", "-C", str(dependency), "ls-files", "--stage", "-z"])
         content = {}
         for entry in tracked.split(b"\0"):
             if not entry:
                 continue
-            relative = Path(os.fsdecode(entry))
+            metadata, encoded_path = entry.split(b"\t", 1)
+            mode, oid, stage = metadata.split(b" ")
+            if mode not in (b"100644", b"100755", b"120000") or stage != b"0":
+                raise ValueError("Unsupported tracked dependency mode or stage: " + name)
+            if not re.fullmatch(rb"[0-9a-f]{40}", oid):
+                raise ValueError("Unsupported tracked dependency object ID: " + name)
+            relative = Path(os.fsdecode(encoded_path))
             path = dependency / relative
-            if relative.is_absolute() or ".." in relative.parts or path.is_symlink():
+            if relative.is_absolute() or ".." in relative.parts:
                 raise ValueError("Unsupported tracked dependency path: " + name)
-            content[relative.as_posix()] = sha256(path.read_bytes()).hexdigest()
+            if any((dependency / parent).is_symlink() for parent in relative.parents):
+                raise ValueError("Symlink parent of tracked dependency path: " + name)
+            if mode == b"120000":
+                # Read the link text, never its target. Git for Windows may
+                # materialize this same tracked link as a regular text file.
+                data = os.fsencode(os.readlink(path)) if path.is_symlink() else path.read_bytes()
+                expected = subprocess.check_output(
+                    ["git", "-C", str(dependency), "cat-file", "blob", oid.decode("ascii")]
+                )
+                if data != expected:
+                    raise ValueError("Tracked symlink text differs from its Git blob: " + name)
+            else:
+                if path.is_symlink():
+                    raise ValueError("Symlink for a regular tracked dependency file: " + name)
+                data = path.read_bytes()
+            content[relative.as_posix()] = sha256(data).hexdigest()
         inspected[name] = {"revision": actual, "clean": True,
                            "trackedFileCount": len(content),
                            "trackedContentSHA256": sha256(json.dumps(content, sort_keys=True).encode()).hexdigest()}

@@ -62,7 +62,11 @@ jobs:
       - name: Download the fixed Mathlib cache
         run: lake exe cache get
       - name: Check dependency pins and build local modules one target at a time
-        run: python3 scripts/build-topological.py --execute --report .ci-output/build.json
+        run: |
+          python3 scripts/build-topological.py --execute --report .ci-output/build.json || {
+            test ! -f .ci-output/build.json || tail -n 80 .ci-output/build.json
+            exit 1
+          }
       - name: Enforce the final theorem's axiom whitelist
         shell: bash
         run: |
@@ -90,5 +94,6 @@ jobs:
         with:
           name: verification-${{ github.sha }}
           path: .ci-output/
+          include-hidden-files: true
           if-no-files-found: warn
           retention-days: 14
