@@ -1,0 +1,9 @@
+.lake/
+/.task-cache/
+/.task-temp/
+/.ci-output/
+__pycache__/
+*.olean
+*.ilean
+*.ir
+*.trace

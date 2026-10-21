@@ -1,0 +1,94 @@
+# Verify source, metadata, build, axioms and independent proof kernels.
+# Uses the repository-pinned Lean toolchain and Mathlib dependencies.
+name: Lean and Palomar verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  metadata:
+    name: Metadata and license
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b
+        with:
+          ruby-version: "3.3.12"
+          bundler-cache: true
+      - name: Check metadata
+        run: ruby scripts/validate-formalization.rb
+      - name: Detect the root license
+        shell: bash
+        run: |
+          bundle exec licensee detect LICENSE --json --no-packages --no-readme > "$RUNNER_TEMP/license.json"
+          ruby -rjson -e '
+            ids = JSON.parse(File.read(ARGV.fetch(0))).fetch("licenses").map { |x| x.fetch("spdx_id") }
+            abort "Expected exactly Apache-2.0" unless ids == ["Apache-2.0"]
+          ' "$RUNNER_TEMP/license.json"
+
+  verify:
+    name: Build, axiom audit, and independent kernels
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Check submitted sources
+        run: |
+          python3 scripts/check-lean-sources.py
+          python3 scripts/check-release-layout.py
+      - name: Set up the pinned Lean toolchain without an automatic build
+        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
+        with:
+          auto-config: "false"
+          build: "false"
+          test: "false"
+          lint: "false"
+          use-mathlib-cache: "false"
+          use-github-cache: "false"
+      - name: Download the fixed Mathlib cache
+        run: lake exe cache get
+      - name: Check dependency pins and build local modules one target at a time
+        run: python3 scripts/build-topological.py --execute --report .ci-output/build.json
+      - name: Enforce the final theorem's axiom whitelist
+        shell: bash
+        run: |
+          set -o pipefail
+          lake env lean -j1 -M4096 verification/Audit.lean 2>&1 | tee .ci-output/axioms.log
+      - name: Install bubblewrap
+        shell: bash
+        run: |
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq bubblewrap >/dev/null
+          # Disposable Ubuntu runner; follows the fixed official template.
+          if [ -e /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+      - name: Run the bundled Comparator and independent kernels
+        shell: bash
+        run: |
+          set -o pipefail
+          bash scripts/verify-comparator.sh 2>&1 | tee .ci-output/comparator.log
+      - name: Check that tracked input files were not changed
+        run: git diff --exit-code
+      - name: Preserve verification logs
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: verification-${{ github.sha }}
+          path: .ci-output/
+          if-no-files-found: warn
+          retention-days: 14
