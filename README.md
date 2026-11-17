@@ -1,12 +1,12 @@
 # Three IM and one CM shared values
 
-Authors: **Yixin He, Quanyu Tang, Jun Wang**.
+Authors: **Pengcheng Fang, Tao Hu, Yanyang Li, Quanyu Tang**.
 
 This repository formalizes the main theorem of the authors' unpublished
 manuscript *On meromorphic functions sharing three values IM and one value CM*.
-Yixin He and Jun Wang gave the original informal proof with assistance from
-ChatGPT. Quanyu Tang carried out the formalization based on their proof,
-using Aristotle and Codex as formalization tools.
+**The article is currently being written.** The informal proof was developed
+with assistance from ChatGPT. Quanyu Tang carried out the formalization based
+on that proof, using Aristotle and Codex as formalization tools.
 
 Let \(f,g\) be nonconstant meromorphic functions on \(\mathbb C\). If they share
 four pairwise distinct values of the Riemann sphere, three **ignoring

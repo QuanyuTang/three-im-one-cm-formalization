@@ -7,7 +7,7 @@ project:
     Two nonconstant meromorphic functions on the complex plane sharing four
     pairwise distinct Riemann-sphere values, three IM and one CM, share all
     four values CM, without a growth assumption.
-  authors: ["Yixin He", "Quanyu Tang", "Jun Wang"]
+  authors: ["Pengcheng Fang", "Tao Hu", "Yanyang Li", "Quanyu Tang"]
   license: "Apache-2.0"
   responsible_maintainers: ["Quanyu Tang"]
 
@@ -17,14 +17,14 @@ classification:
 
 sources:
   - title: "On meromorphic functions sharing three values IM and one value CM"
-    authors: ["Yixin He", "Quanyu Tang", "Jun Wang"]
+    authors: ["Pengcheng Fang", "Tao Hu", "Yanyang Li", "Quanyu Tang"]
     type: "unpublished manuscript"
     location: "Main theorem, labelled thm:main"
     relationship: "formalizes"
     note: >-
-      Unpublished manuscript supplied by the authors. Yixin He and Jun Wang
-      gave the original informal proof with assistance from ChatGPT. Quanyu
-      Tang was responsible for formalizing that proof using Aristotle and
+      The article is currently being written. The informal proof was
+      developed with assistance from ChatGPT. Quanyu Tang was responsible
+      for formalizing that proof using Aristotle and
       Codex as formalization tools. The manuscript and its TeX source are
       not distributed here.
 
@@ -52,12 +52,12 @@ automation:
   methods:
     - method: "copilot"
       framework: "ChatGPT"
-      tool_setup: "Assistance to Yixin He and Jun Wang in their original informal proof."
+      tool_setup: "Assistance in developing the informal proof."
     - method: "agent"
       framework: "Aristotle"
       tool_setup: >-
         Used by Quanyu Tang as a formalization tool for the initial Lean
-        development based on the informal proof by Yixin He and Jun Wang.
+        development based on the informal proof.
     - method: "agent"
       framework: "Codex"
       tool_setup: >-
@@ -69,7 +69,7 @@ automation:
         intermediate growth, classification, or compactness hypotheses.
   notes: >-
     Quanyu Tang is responsible for the formalization based on the original
-    informal proof by Yixin He and Jun Wang, who used ChatGPT for assistance.
+    informal proof, which was developed with assistance from ChatGPT.
     Aristotle and Codex are the formalization tools used by Quanyu Tang.
     Tool involvement does not constitute human author review or peer review.
 
@@ -107,8 +107,8 @@ alignment:
         its ordinary comparison.
 
 acknowledgements: >-
-  Lean and Mathlib; ChatGPT for assistance to Yixin He and Jun Wang in their
-  original informal proof; Aristotle and Codex as the tools used by Quanyu Tang
+  Lean and Mathlib; ChatGPT for assistance in developing the informal proof;
+  Aristotle and Codex as the tools used by Quanyu Tang
   for the formalization based on that proof. The included sphere
   and normal-family modules adapt Will (Ziang) Li's no-wandering-domains at
   commit 0a6497b0cc9ed39a6a705bf013449635894b56d0 under Apache-2.0; the
