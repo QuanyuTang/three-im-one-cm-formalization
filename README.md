@@ -41,7 +41,7 @@ python3 scripts/check-lean-sources.py
 python3 scripts/check-release-layout.py
 lake exe cache get
 python3 scripts/build-topological.py --execute --report .ci-output/build.json
-lake env lean -j1 -M4096 verification/Audit.lean
+lake env lean -j1 -M8192 verification/Audit.lean
 bash scripts/verify-comparator.sh
 ```
 

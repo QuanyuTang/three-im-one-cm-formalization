@@ -125,7 +125,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          lake env lean -j1 -M4096 verification/Audit.lean 2>&1 | tee .ci-output/axioms.log
+          lake env lean -j1 -M8192 verification/Audit.lean 2>&1 | tee .ci-output/axioms.log
       - name: Install bubblewrap
         shell: bash
         run: |
