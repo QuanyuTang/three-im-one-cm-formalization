@@ -17,8 +17,8 @@ commit `5606b50ee6348c502410a0526be26e0dac7a1bc2`, under Apache-2.0.
 Its source attribution is retained in that module.
 
 The manuscript and project authors are Pengcheng Fang, Tao Hu, Yanyang Li,
-and Quanyu Tang, in that order. The article is currently being written.
-Its text and TeX source are not included or relicensed by the repository's
+Quanyu Tang, and Haiqi Zhang, in that order. The article is currently being
+written. Its text and TeX source are not included or relicensed by the repository's
 code license. The informal proof was developed with assistance from ChatGPT.
 Quanyu Tang is responsible for the formalization based on that proof,
 using Aristotle and Codex as formalization tools.

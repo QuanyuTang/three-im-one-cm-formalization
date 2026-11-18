@@ -7,7 +7,7 @@ project:
     Two nonconstant meromorphic functions on the complex plane sharing four
     pairwise distinct Riemann-sphere values, three IM and one CM, share all
     four values CM, without a growth assumption.
-  authors: ["Pengcheng Fang", "Tao Hu", "Yanyang Li", "Quanyu Tang"]
+  authors: ["Pengcheng Fang", "Tao Hu", "Yanyang Li", "Quanyu Tang", "Haiqi Zhang"]
   license: "Apache-2.0"
   responsible_maintainers: ["Quanyu Tang"]
 
@@ -17,7 +17,7 @@ classification:
 
 sources:
   - title: "On meromorphic functions sharing three values IM and one value CM"
-    authors: ["Pengcheng Fang", "Tao Hu", "Yanyang Li", "Quanyu Tang"]
+    authors: ["Pengcheng Fang", "Tao Hu", "Yanyang Li", "Quanyu Tang", "Haiqi Zhang"]
     type: "unpublished manuscript"
     location: "Main theorem, labelled thm:main"
     relationship: "formalizes"

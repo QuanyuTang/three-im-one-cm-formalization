@@ -1,6 +1,6 @@
 # Three IM and one CM shared values
 
-Authors: **Pengcheng Fang, Tao Hu, Yanyang Li, Quanyu Tang**.
+Authors: **Pengcheng Fang, Tao Hu, Yanyang Li, Quanyu Tang, Haiqi Zhang**.
 
 This repository formalizes the main theorem of the authors' unpublished
 manuscript *On meromorphic functions sharing three values IM and one value CM*.

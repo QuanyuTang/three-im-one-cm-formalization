@@ -4,7 +4,7 @@ module
 Copyright (c) 2026 Yixin He, Quanyu Tang, Jun Wang. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Original source authors: Yixin He, Quanyu Tang, Jun Wang
-Project authors: Pengcheng Fang, Tao Hu, Yanyang Li, Quanyu Tang
+Project authors: Pengcheng Fang, Tao Hu, Yanyang Li, Quanyu Tang, Haiqi Zhang
 -/
 public import RequestProject.ThreeIM.PicardBasic
 public import NoWanderingDomains.Sphere.SphereHolomorphic
