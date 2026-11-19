@@ -18,15 +18,15 @@ classification:
 sources:
   - title: "On meromorphic functions sharing three values IM and one value CM"
     authors: ["Pengcheng Fang", "Tao Hu", "Yanyang Li", "Quanyu Tang", "Haiqi Zhang"]
-    type: "unpublished manuscript"
-    location: "Main theorem, labelled thm:main"
+    id: "https://hexagonmath.org/2611.00568v2"
+    type: "preprint"
+    location: "Theorem 1.1"
     relationship: "formalizes"
+    license: "CC-BY-4.0"
     note: >-
-      The article is currently being written. The informal proof was
-      developed with assistance from ChatGPT. Quanyu Tang was responsible
-      for formalizing that proof using Aristotle and
-      Codex as formalization tools. The manuscript and its TeX source are
-      not distributed here.
+      HexagonMath preprint hexagon:2611.00568v2. The informal proof was
+      developed with assistance from ChatGPT. Quanyu Tang was responsible for
+      formalizing that proof using Aristotle and Codex as formalization tools.
 
 status:
   scope: >-
@@ -34,9 +34,10 @@ status:
     and infinity included. The substantive proof and Solution contain no
     unresolved holes. Challenge contains one deliberate theorem placeholder,
     excluded from the substantive proof counts under the metadata schema.
-    CI runs the official Comparator and independent kernels; its actual
-    workflow results determine that check's outcome. No Palomar registration
-    is asserted.
+    CI runs the official Comparator and independent kernels. Palomar Registry
+    entry PALOMAR-2026-11-17-000010 v2
+    (https://palomar-registry.org/entry?id=PALOMAR-2026-11-17-000010&version=2)
+    records mechanical verification of commit 2874a773c15da244347c6a6ccdc1a30e9bdd2a26.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -89,14 +90,13 @@ review:
   notes: >-
     Agent reviews compared the original statement and definitions with the
     manuscript and inspected actual compilation, proof-dependency axioms,
-    and source and artifact hashes. No completed human author review,
-    independent peer review, or Palomar mechanical or editorial approval
-    is claimed. Consult actual CI results for Linux Comparator verification.
+    and source and artifact hashes. See the Palomar entry for its verification
+    and review evidence, and GitHub Actions for repository CI results.
 
 alignment:
   namespace: "ThreeIMOneCM"
   statements:
-    - source: "Main theorem of the authors' manuscript, labelled thm:main"
+    - source: "Theorem 1.1 of HexagonMath preprint hexagon:2611.00568v2"
       lean: "ThreeIMOneCM.three_IM_one_CM"
       module: "Challenge.lean and Solution.lean"
       note: >-

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check source requirements before builds; full Palomar verification is still required.
+"""Check Lean source requirements before the build and Comparator checks.
 
 Scanner functions follow PalomarSubmission/scripts/source_requirements.py.
 """

@@ -56,7 +56,7 @@ def main() -> int:
     for error in errors:
         print(error)
     if not errors:
-        print("Draft local release-layout checks passed; full Palomar verification is still required")
+        print("Local release-layout checks passed")
     return int(bool(errors))
 
 

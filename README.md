@@ -2,11 +2,16 @@
 
 Authors: **Pengcheng Fang, Tao Hu, Yanyang Li, Quanyu Tang, Haiqi Zhang**.
 
-This repository formalizes the main theorem of the authors' unpublished
-manuscript *On meromorphic functions sharing three values IM and one value CM*.
-**The article is currently being written.** The informal proof was developed
-with assistance from ChatGPT. Quanyu Tang carried out the formalization based
-on that proof, using Aristotle and Codex as formalization tools.
+This repository formalizes Theorem 1.1 of the HexagonMath preprint
+[*On meromorphic functions sharing three values IM and one value CM* (`hexagon:2611.00568v2`)](https://hexagonmath.org/2611.00568v2).
+
+The Palomar Registry records the mechanical verification of
+[commit `2874a77`](https://github.com/QuanyuTang/three-im-one-cm-formalization/tree/2874a773c15da244347c6a6ccdc1a30e9bdd2a26)
+in [**PALOMAR-2026-11-17-000010 v2**](https://palomar-registry.org/entry?id=PALOMAR-2026-11-17-000010&version=2).
+
+The informal proof was developed with assistance from ChatGPT. Quanyu Tang
+carried out the formalization based on that proof, using Aristotle and Codex
+as formalization tools.
 
 Let \(f,g\) be nonconstant meromorphic functions on \(\mathbb C\). If they share
 four pairwise distinct values of the Riemann sphere, three **ignoring
@@ -51,12 +56,10 @@ the official Comparator with these independent kernels. Consult the actual
 workflow results for its outcome. `definition_names` is empty: no definition
 body is exempted from ordinary Comparator comparison.
 
-The formal proof reorganizes some manuscript arguments, including exclusion
-of multiplicity defects. Its intermediate constructions are not additional
-hypotheses. Numbering in inherited source comments follows the intermediate
-formalization draft. The unpublished manuscript and its TeX source are not distributed.
-Agent review does not assert completed human author review, peer review, or
-Palomar registration.
+The formal proof reorganizes some arguments from the preprint, including the
+exclusion of multiplicity defects. Its intermediate constructions are not
+additional hypotheses. Numbering in inherited source comments follows the
+intermediate formalization draft.
 
 Maintainer: Quanyu Tang ([QuanyuTang](https://github.com/QuanyuTang)).
 Code license: **Apache-2.0**; see `LICENSE` and the preserved source notices.
